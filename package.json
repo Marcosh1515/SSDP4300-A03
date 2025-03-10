@@ -1,0 +1,24 @@
+{
+  "name": "ssdp-4300-assignment-3",
+  "version": "1.0.0",
+  "description": "Simple website with API Gateway, lambda and DynamoDB integration for SSDP4300-A03",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js"
+  },
+  "dependencies": {
+    "aws-sdk": "^2.1692.0",
+    "aws-xray-sdk": "^3.10.3",
+    "axios": "^1.8.2",
+    "body-parser": "^1.20.2",
+    "express": "^4.18.2",
+    "uuid": "^9.0.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.0"
+  },
+  "engines": {
+    "node": ">=14.0.0"
+  }
+}

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SSDP4300-A03</title>
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <nav>
+          <ul>
+            <li><a href="index.html">Home</a></li>
+            <li class="active"><a href="main.html">To-Do List</a></li>
+            <li><a href="help.html">Help</a></li>
+          </ul>
+        </nav>
+      </header>
+
+      <main>
+        <h1>To-Do List</h1>
+
+        <div class="todo-container">
+          <div class="add-todo">
+            <input type="text" id="new-todo" placeholder="Add a new task..." />
+            <button id="add-todo-btn">Add Task</button>
+          </div>
+
+          <div class="todo-list">
+            <h2>Your Tasks</h2>
+            <ul id="todos">
+              <!-- To-do items will be dynamically added here -->
+              <li class="loading">Loading your tasks...</li>
+            </ul>
+          </div>
+        </div>
+      </main>
+
+      <footer>
+        <p>&copy; 2025 SSDP4300-A03</p>
+      </footer>
+    </div>
+
+    <script src="js/main.js"></script>
+  </body>
+</html>
