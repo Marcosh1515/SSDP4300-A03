@@ -9,8 +9,7 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 // API Gateway Endpoint
-const API_GATEWAY_URL =
-  'https://z55rzwz8q7.execute-api.us-west-2.amazonaws.com/prod/ssdp4300-a03-db-manager';
+const API_GATEWAY_URL = 'https://z55rzwz8q7.execute-api.us-west-2.amazonaws.com/prod/ssdp4300-a03-db-manager';
 
 // Middleware
 app.use(bodyParser.json());
@@ -39,9 +38,7 @@ app.get('/api/todos', async (req, res) => {
       console.error('API Gateway Response:', error.response.data);
       console.error('Status:', error.response.status);
     }
-    res
-      .status(500)
-      .json({ error: 'Failed to fetch todos', details: error.message });
+    res.status(500).json({ error: 'Failed to fetch todos', details: error.message });
   }
 });
 
@@ -49,6 +46,7 @@ app.get('/api/todos', async (req, res) => {
 app.post('/api/todos', async (req, res) => {
   try {
     const { text } = req.body;
+
     if (!text) {
       return res.status(400).json({ error: 'Todo text is required' });
     }
@@ -66,16 +64,14 @@ app.post('/api/todos', async (req, res) => {
       },
     };
 
-    const response = await axios.post(`${API_GATEWAY_URL}`, lambdaPayload);
+    await axios.post(`${API_GATEWAY_URL}`, lambdaPayload);
     res.status(201).json(todo);
   } catch (error) {
     console.error('Error adding todo:', error);
     if (error.response) {
       console.error('Lambda Response:', error.response.data);
     }
-    res
-      .status(500)
-      .json({ error: 'Failed to add todo', details: error.message });
+    res.status(500).json({ error: 'Failed to add todo', details: error.message });
   }
 });
 
@@ -83,7 +79,16 @@ app.post('/api/todos', async (req, res) => {
 app.delete('/api/todos/:id', async (req, res) => {
   try {
     const { id } = req.params;
-    await axios.delete(`${API_GATEWAY_URL}/todos/${id}`);
+
+    // Format the request for Lambda
+    const lambdaPayload = {
+      operation: 'delete',
+      payload: {
+        Id: id,
+      },
+    };
+
+    await axios.delete(`${API_GATEWAY_URL}`, lambdaPayload);
     res.status(204).json({ message: 'Todo deleted successfully' });
   } catch (error) {
     console.error('Error deleting todo:', error);
@@ -101,15 +106,16 @@ app.put('/api/todos/:id', async (req, res) => {
       return res.status(400).json({ error: 'Todo text is required' });
     }
 
-    const updatedTodo = {
-      text,
-      // updatedAt: new Date().toISOString(),
+    // Format the request for Lambda
+    const lambdaPayload = {
+      operation: 'update',
+      payload: {
+        Id: id,
+        Text: text,
+      },
     };
 
-    const response = await axios.put(
-      `${API_GATEWAY_URL}/todos/${id}`,
-      updatedTodo
-    );
+    const response = await axios.put(`${API_GATEWAY_URL}`, lambdaPayload);
     res.status(200).json(response.data);
   } catch (error) {
     console.error('Error updating todo:', error);

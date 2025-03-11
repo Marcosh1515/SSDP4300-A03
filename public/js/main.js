@@ -31,19 +31,14 @@ async function fetchTodos() {
     if (!response.ok) {
       const errorData = await response.json();
       console.error('Server Error Details:', errorData);
-      throw new Error(
-        `Failed to fetch todos: ${errorData.details || 'Unknown error'}`
-      );
+      throw new Error(`Failed to fetch todos: ${errorData.details || 'Unknown error'}`);
     }
 
     const todos = await response.json();
     console.log('Received todos:', todos);
 
     if (!Array.isArray(todos)) {
-      console.error(
-        'Invalid response format. Expected array, got:',
-        typeof todos
-      );
+      console.error('Invalid response format. Expected array, got:', typeof todos);
       throw new Error('Invalid response format from server');
     }
 
@@ -108,6 +103,8 @@ async function removeTodo(id) {
 }
 
 async function updateTodo(id, newText) {
+  const newText = newTodoInput.value.trim();
+
   try {
     const response = fetch(`${API_URL}/${id}`, {
       method: 'PATCH',
@@ -184,8 +181,7 @@ function addTodoToDOM(todo) {
         li.remove();
         // If no todos left, show empty message
         if (todosList.children.length === 0) {
-          todosList.innerHTML =
-            '<li class="empty">No tasks yet. Add a new task above!</li>';
+          todosList.innerHTML = '<li class="empty">No tasks yet. Add a new task above!</li>';
         }
       } else {
         throw new Error('Failed to delete todo');
