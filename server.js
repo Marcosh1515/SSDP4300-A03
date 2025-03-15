@@ -9,7 +9,11 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 // API Gateway Endpoint
+<<<<<<< HEAD
 const API_GATEWAY_URL = 'https://z55rzwz8q7.execute-api.us-west-2.amazonaws.com/prod/ssdp4300-a03-db-manager';
+=======
+const API_GATEWAY_URL = process.env.API_GATEWAY_URL;
+>>>>>>> d27c879 (all requirements met)
 
 // Middleware
 app.use(bodyParser.json());
@@ -53,7 +57,7 @@ app.post('/api/todos', async (req, res) => {
 
     const todo = {
       id: uuidv4(),
-      text,
+      text: text,
     };
 
     // Format the request for Lambda
@@ -80,6 +84,7 @@ app.delete('/api/todos/:id', async (req, res) => {
   try {
     const { id } = req.params;
 
+<<<<<<< HEAD
     // Format the request for Lambda
     const lambdaPayload = {
       operation: 'delete',
@@ -89,6 +94,19 @@ app.delete('/api/todos/:id', async (req, res) => {
     };
 
     await axios.delete(`${API_GATEWAY_URL}`, lambdaPayload);
+=======
+    const lambdaPayload = {
+      operation: 'delete',
+      payload: {
+        TableName: '',
+        Key: {
+          id: id,
+        },
+      },
+    };
+
+    await axios.post(`${API_GATEWAY_URL}`, lambdaPayload);
+>>>>>>> d27c879 (all requirements met)
     res.status(204).json({ message: 'Todo deleted successfully' });
   } catch (error) {
     console.error('Error deleting todo:', error);
@@ -97,15 +115,18 @@ app.delete('/api/todos/:id', async (req, res) => {
 });
 
 // Update a todo
-app.put('/api/todos/:id', async (req, res) => {
+app.patch('/api/todos/:id', async (req, res) => {
   try {
     const { id } = req.params;
     const { text } = req.body;
+
+    console.log('Updating todo:', id, text);
 
     if (!text) {
       return res.status(400).json({ error: 'Todo text is required' });
     }
 
+<<<<<<< HEAD
     // Format the request for Lambda
     const lambdaPayload = {
       operation: 'update',
@@ -117,8 +138,29 @@ app.put('/api/todos/:id', async (req, res) => {
 
     const response = await axios.put(`${API_GATEWAY_URL}`, lambdaPayload);
     res.status(200).json(response.data);
+=======
+    const lambdaPayload = {
+      operation: 'update',
+      payload: {
+        TableName: '',
+        Key: {
+          id: id,
+        },
+        UpdateExpression: 'SET #text = :text',
+        ExpressionAttributeNames: {
+          '#text': 'text',
+        },
+        ExpressionAttributeValues: {
+          ':text': text,
+        },
+      },
+    };
+
+    await axios.post(`${API_GATEWAY_URL}`, lambdaPayload);
+    res.status(204).json({ message: 'Todo updated successfully' });
+>>>>>>> d27c879 (all requirements met)
   } catch (error) {
-    console.error('Error updating todo:', error);
+    console.error('Error deleting todo:', error);
     res.status(500).json({ error: 'Failed to update todo' });
   }
 });
